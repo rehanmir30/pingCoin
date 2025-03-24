@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "779956375536",
+    "project_id": "pingcoin",
+    "storage_bucket": "pingcoin.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:779956375536:android:28af6a3cac8c781425d735",
+        "android_client_info": {
+          "package_name": "com.pingcoin.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp5BxH5P2eDj2iX3fx2Pxr-e-aY43En6g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
