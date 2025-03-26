@@ -40,6 +40,10 @@ dependencies:
   flutter_swipe_button:
   animate_do:
   loading_indicator:
+  shared_preferences:
+  intl_phone_number_input:
+  dotted_border:
+  intl:
 
   #firebase
   firebase_core:

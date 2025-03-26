@@ -40,6 +40,7 @@ class _DashboardState extends State<Dashboard> {
     Get.find<ContentController>().getContent();
     Get.find<ContentController>().getAllFaqs();
 
+
   }
 
   final List<Widget> _pages = const [

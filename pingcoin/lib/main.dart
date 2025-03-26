@@ -5,6 +5,7 @@ import 'package:pingcoin/controllers/initControllers.dart';
 import 'package:pingcoin/views/auth/loginScreen.dart';
 import 'package:pingcoin/views/auth/signupScreen.dart';
 import 'package:pingcoin/views/splashScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: "font"
       ),
-      home: LoginScreen(),
+      home: SplashScreen(),
     );
   }
 }

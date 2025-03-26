@@ -5,6 +5,7 @@ import 'package:pingcoin/controllers/authController.dart';
 import 'package:pingcoin/models/adInterestModel.dart';
 import 'package:pingcoin/models/userModel.dart';
 import 'package:pingcoin/widgets/customSnackbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../views/dashboard/dashboard.dart';
 
@@ -24,6 +25,7 @@ class AuthService {
 
   signup(String name, String email, String password, Set<AdInterestModel> selectedInterests) async {
     _authController.setLoading(true);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     final FirebaseAuth _auth = FirebaseAuth.instance;
     try {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
@@ -41,47 +43,59 @@ class AuthService {
           createdAt: DateTime.now(),
           status: "Active",
           interests: interests,
+          favorites: [],
           updatedAt: DateTime.now());
 
       await userRef.doc(userModel.id).set(userModel.toMap());
       _authController.setUserModel(userModel);
+      prefs.setString("pingUserId", userModel.id);
+      getUserData(userModel.id);
       _authController.setLoading(false);
-      Get.offAll(Dashboard(),transition: Transition.circularReveal);
+      Get.offAll(Dashboard(), transition: Transition.circularReveal);
     } on FirebaseAuthException catch (e) {
-      CustomSnackbar.show("Error", "Something went wrong. Try again later",isSuccess: false);
+      CustomSnackbar.show("Error", "Something went wrong. Try again later", isSuccess: false);
       _authController.setLoading(false);
     }
   }
 
-   login(String email, String password) async {
-     _authController.setLoading(true);
-     try{
-       final FirebaseAuth _auth = FirebaseAuth.instance;
-       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-         email: email,
-         password: password,
-       );
-
-       await userRef.doc(userCredential.user!.uid).get().then((value) {
-         _authController.setUserModel(UserModel.fromMap(value.data()!));
-         _authController.setLoading(false);
-         Get.offAll(Dashboard(),transition: Transition.circularReveal);
-       });
-
-     }on FirebaseAuthException catch (e){
-       CustomSnackbar.show("Error", "Something went wrong. Try again later",isSuccess: false);
-       _authController.setLoading(false);
-     }
-   }
-
-   updateProfile(String name) async{
+  login(String email, String password) async {
     _authController.setLoading(true);
-    await userRef.doc(_authController.userModel!.id).update({"fullName":name});
-    UserModel user= _authController.userModel!;
-    user.fullName=name;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      final FirebaseAuth _auth = FirebaseAuth.instance;
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      prefs.setString("pingUserId", userCredential.user!.uid);
+      getUserData(userCredential.user!.uid);
+
+      _authController.setLoading(false);
+      Get.offAll(Dashboard(), transition: Transition.circularReveal);
+
+    } on FirebaseAuthException catch (e) {
+      CustomSnackbar.show("Error", "Something went wrong. Try again later", isSuccess: false);
+      _authController.setLoading(false);
+    }
+  }
+
+  updateProfile(String name) async {
+    _authController.setLoading(true);
+    await userRef.doc(_authController.userModel!.id).update({"fullName": name});
+    UserModel user = _authController.userModel!;
+    user.fullName = name;
     _authController.setUserModel(user);
     _authController.setLoading(false);
     Get.back();
     CustomSnackbar.show("Success", "Profile updated successfully");
-   }
+  }
+
+  getUserData(String userId) {
+    userRef.doc(userId).snapshots().listen((event) {
+      _authController.setUserModel(UserModel.fromMap(event.data()!));
+      _authController.getFavorites();
+    });
+
+  }
 }

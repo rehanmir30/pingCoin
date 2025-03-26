@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/routes/transitions_type.dart';
+import 'package:pingcoin/controllers/authController.dart';
 
 import '../../../../constants/colors.dart';
+import '../../../../models/coinModel.dart';
 import '../coinDetailScreen.dart';
 
 class FavoriteTab extends StatefulWidget {
@@ -15,39 +15,45 @@ class FavoriteTab extends StatefulWidget {
 }
 
 class _FavoriteTabState extends State<FavoriteTab> {
-
   int? swipedIndex;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: rBg,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Our Collections",style: TextStyle(color: rWhite,fontSize: 22,fontWeight: FontWeight.normal,fontFamily: "font2"),).marginSymmetric(horizontal: 12).marginOnly(top: 12),
-            ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: 8,
-                shrinkWrap: true,
-                itemBuilder: (BuildContext context, int index) {
-                  return FavoriteCollectionTile(
-
-                  );
-                }),
-            SizedBox(
-              height: 50,
+      body: GetBuilder<AuthController>(
+        builder: (authController) {
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Our Collections",
+                  style: TextStyle(color: rWhite, fontSize: 22, fontWeight: FontWeight.normal, fontFamily: "font2"),
+                ).marginSymmetric(horizontal: 12).marginOnly(top: 12),
+                ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: authController.favorites.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      return FavoriteCollectionTile(coinModel: authController.favorites[index]);
+                    }),
+                SizedBox(
+                  height: 50,
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
 }
 
 class FavoriteCollectionTile extends StatefulWidget {
+  final CoinModel coinModel;
 
+  const FavoriteCollectionTile({super.key, required this.coinModel});
 
   @override
   _FavoriteCollectionTileState createState() => _FavoriteCollectionTileState();
@@ -56,22 +62,17 @@ class FavoriteCollectionTile extends StatefulWidget {
 class _FavoriteCollectionTileState extends State<FavoriteCollectionTile> {
   bool isSwiped = false;
 
-  void openSwipe(){
+  void openSwipe() {
     setState(() {
-      isSwiped=true;
+      isSwiped = true;
     });
   }
-  void closeSwipe(){
+
+  void closeSwipe() {
     setState(() {
-      isSwiped=false;
+      isSwiped = false;
     });
   }
-  // void toggleSwipe() {
-  //   setState(() {
-  //     isSwiped = !isSwiped;
-  //     print("Swiped: $isSwiped"); // Debugging
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +81,6 @@ class _FavoriteCollectionTileState extends State<FavoriteCollectionTile> {
         if (details.primaryVelocity! < -200) {
           // Swiping left
           openSwipe();
-
         } else if (details.primaryVelocity! > 200) {
           // Swiping right
           closeSwipe();
@@ -93,7 +93,8 @@ class _FavoriteCollectionTileState extends State<FavoriteCollectionTile> {
               alignment: Alignment.centerRight,
               child: AnimatedContainer(
                 duration: Duration(milliseconds: 300),
-                width: isSwiped ? 70 : 0, // Show only when swiped
+                width: isSwiped ? 70 : 0,
+                // Show only when swiped
                 height: 120,
                 margin: EdgeInsets.only(left: 12),
                 decoration: BoxDecoration(
@@ -104,7 +105,7 @@ class _FavoriteCollectionTileState extends State<FavoriteCollectionTile> {
                 child: isSwiped
                     ? SvgPicture.asset("assets/svgs/delete.svg") // Show delete icon only when swiped
                     : SizedBox.shrink(),
-              ).marginSymmetric(vertical: 8,horizontal: 12),
+              ).marginSymmetric(vertical: 8, horizontal: 12),
             ),
           ),
 
@@ -114,7 +115,11 @@ class _FavoriteCollectionTileState extends State<FavoriteCollectionTile> {
             transform: Matrix4.translationValues(isSwiped ? -80 : 0, 0, 0), // Moves left but keeps full size
             child: InkWell(
               onTap: () {
-                // Get.to(CoinDetailScreen(), transition: Transition.fade);
+                Get.to(
+                    CoinDetailScreen(
+                      coinModel: widget.coinModel,
+                    ),
+                    transition: Transition.fade);
               },
               child: Container(
                 height: 120,
@@ -133,14 +138,18 @@ class _FavoriteCollectionTileState extends State<FavoriteCollectionTile> {
                 ),
                 child: Row(
                   children: [
-                    Image.asset("assets/images/coin.png"),
+                    Image.network(
+                      "${widget.coinModel.coinFront}",
+                      width: 60,
+                      height: 60,
+                    ),
                     Expanded(
                       child: Column(
                         children: [
-                          Text("🇺🇸"),
+                          Text("${widget.coinModel.country.substring(0, 5)}"),
                           SizedBox(height: 8),
                           Text(
-                            "American Gold Eagle",
+                            "${widget.coinModel.name}",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -151,15 +160,21 @@ class _FavoriteCollectionTileState extends State<FavoriteCollectionTile> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              _buildInfoColumn("assets/svgs/diameter.svg", "37.00", "Diameter (mm)"),
-                              _buildInfoColumn("assets/svgs/thickness.svg", "2.00", "Thickness (mm)"),
-                              _buildInfoColumn("assets/svgs/weight.svg", "31.10", "Weight (g)"),
+                              _buildInfoColumn(
+                                  "assets/svgs/diameter.svg", "${widget.coinModel.diameter}", "Diameter (${widget.coinModel.diameterUnit})"),
+                              _buildInfoColumn(
+                                  "assets/svgs/thickness.svg", "${widget.coinModel.thickness}", "Thickness (${widget.coinModel.thicknessUnit})"),
+                              _buildInfoColumn("assets/svgs/weight.svg", "${widget.coinModel.weight}", "Weight (${widget.coinModel.weightUnit})"),
                             ],
                           ),
                         ],
                       ),
                     ),
-                    Image.asset("assets/images/coinBack2.png"),
+                    Image.network(
+                      "${widget.coinModel.coinBack}",
+                      width: 60,
+                      height: 60,
+                    ),
                   ],
                 ).marginSymmetric(horizontal: 12, vertical: 8),
               ).marginSymmetric(vertical: 8, horizontal: 12),
@@ -190,6 +205,3 @@ class _FavoriteCollectionTileState extends State<FavoriteCollectionTile> {
     );
   }
 }
-
-
-

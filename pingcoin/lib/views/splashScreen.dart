@@ -4,7 +4,12 @@ import 'package:get/get.dart';
 import 'package:pingcoin/animations/fadeInAnimationBTT.dart';
 import 'package:pingcoin/animations/fadeInAnimationTTB.dart';
 import 'package:pingcoin/constants/colors.dart';
+import 'package:pingcoin/services/authService.dart';
+import 'package:pingcoin/views/dashboard/dashboard.dart';
 import 'package:pingcoin/views/welcomeScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../controllers/authController.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,9 +19,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  
-  
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,8 +60,24 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 4),(){
-      Get.offAll(WelcomeScreen(),transition: Transition.leftToRight);
-    });
+
+    getSharedPrefs();
+
+  }
+  getSharedPrefs()async{
+    await Get.find<AuthController>().getAdInterests();
+    SharedPreferences prefs=await SharedPreferences.getInstance();
+    String? userId=prefs.getString("pingUserId");
+
+    if(userId==null){
+      Future.delayed(Duration(seconds: 4),(){
+        Get.offAll(WelcomeScreen(),transition: Transition.leftToRight);
+      });
+    }else{
+      Future.delayed(Duration(seconds: 4),(){
+        AuthService().getUserData(userId);
+        Get.offAll(Dashboard(),transition: Transition.leftToRight);
+      });
+    }
   }
 }

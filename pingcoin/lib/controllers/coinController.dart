@@ -93,4 +93,12 @@ class CoinController extends GetxController{
   getCoins(){
     CoinService().getCoins();
   }
+
+  addToFavorite(CoinModel coinModel) {
+    CoinService().addToFavorites(coinModel);
+  }
+
+   removeFromFavorite(CoinModel coinModel) {
+     CoinService().removeFromFavorites(coinModel);
+   }
 }

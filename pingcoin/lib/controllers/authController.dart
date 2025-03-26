@@ -2,7 +2,9 @@ import 'package:get/get.dart';
 import 'package:pingcoin/services/authService.dart';
 
 import '../models/adInterestModel.dart';
+import '../models/coinModel.dart';
 import '../models/userModel.dart';
+import 'coinController.dart';
 
 class AuthController extends GetxController {
 
@@ -14,6 +16,23 @@ class AuthController extends GetxController {
 
   bool _isLoading=false;
   bool get isLoading=>_isLoading;
+
+  List<CoinModel> _favorites=[];
+  List<CoinModel> get favorites=>_favorites;
+
+  getFavorites(){
+    var allCoins = Get.find<CoinController>().allCoins;
+    var favoriteIds = _userModel?.favorites ?? [];
+
+    if (favoriteIds.isNotEmpty) {
+      _favorites = allCoins.where((coin) {
+        return favoriteIds.contains(coin.id);
+      }).toList();
+    } else {
+      _favorites = [];
+    }
+
+  }
 
   setLoading(bool value){
     _isLoading=value;

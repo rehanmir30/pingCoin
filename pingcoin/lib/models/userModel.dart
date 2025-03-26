@@ -6,6 +6,7 @@ class UserModel {
   DateTime updatedAt = DateTime.now();
   String status = "";
   List<String> interests = [];
+  List<String> favorites = [];
 
   UserModel(
       {required this.id,
@@ -14,6 +15,7 @@ class UserModel {
       required this.createdAt,
       required this.status,
       required this.interests,
+      required this.favorites,
       required this.updatedAt});
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
@@ -24,10 +26,11 @@ class UserModel {
         createdAt: map["createdAt"].toDate(),
         status: map["status"],
         interests: List<String>.from(map["interests"] ?? []),
+        favorites: List<String>.from(map["favorites"] ?? []),
         updatedAt: map["updatedAt"].toDate());
   }
 
   Map<String, dynamic> toMap() {
-    return {"id": id, "fullName": fullName, "email": email, "createdAt": createdAt, "status": status, "interests": interests, "updatedAt": updatedAt};
+    return {"id": id, "fullName": fullName, "email": email, "createdAt": createdAt, "status": status, "interests": interests, "updatedAt": updatedAt,"favorites":favorites};
   }
 }
