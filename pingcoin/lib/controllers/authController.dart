@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
+import 'package:pingcoin/models/businessModel.dart';
 import 'package:pingcoin/services/authService.dart';
 
 import '../models/adInterestModel.dart';
@@ -65,6 +68,10 @@ class AuthController extends GetxController {
 
    updateProfile(String name) {
     AuthService().updateProfile(name);
+   }
+
+   setBusinessRequest(BusinessDevelopmentModel businessDevelopmentModel, File bannerImage) {
+    AuthService().setBusinessRequest(businessDevelopmentModel,bannerImage);
    }
 
 }

@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:pingcoin/constants/firebaseRef.dart';
 import 'package:pingcoin/controllers/authController.dart';
 import 'package:pingcoin/models/adInterestModel.dart';
+import 'package:pingcoin/models/businessModel.dart';
 import 'package:pingcoin/models/userModel.dart';
 import 'package:pingcoin/widgets/customSnackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -73,7 +77,6 @@ class AuthService {
 
       _authController.setLoading(false);
       Get.offAll(Dashboard(), transition: Transition.circularReveal);
-
     } on FirebaseAuthException catch (e) {
       CustomSnackbar.show("Error", "Something went wrong. Try again later", isSuccess: false);
       _authController.setLoading(false);
@@ -96,6 +99,37 @@ class AuthService {
       _authController.setUserModel(UserModel.fromMap(event.data()!));
       _authController.getFavorites();
     });
+  }
 
+  setBusinessRequest(BusinessDevelopmentModel businessDevelopmentModel, File bannerImage) async {
+    _authController.setLoading(true);
+    businessDevelopmentModel.id = businessesRef.doc().id;
+    businessDevelopmentModel.specificCode = businessDevelopmentModel.id.substring(0, 5);
+    try {
+      businessDevelopmentModel.image = (await uploadFileToFirebase(bannerImage, "business/${businessDevelopmentModel.id}"))!;
+      await businessesRef.doc(businessDevelopmentModel.id).set(businessDevelopmentModel.toMap());
+      _authController.setLoading(false);
+      Get.back();
+      CustomSnackbar.show("Success", "Business request submitted successfully");
+    } catch (e) {
+      CustomSnackbar.show("Error", "Something went wrong.", isSuccess: false);
+      _authController.setLoading(false);
+    }
+  }
+
+  Future<String?> uploadFileToFirebase(File file, String path) async {
+    try {
+      final storageRef = FirebaseStorage.instance.ref().child(path);
+
+      final uploadTask = storageRef.putFile(file);
+
+      final snapshot = await uploadTask.whenComplete(() {});
+
+      final downloadUrl = await snapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      print("Error uploading file: $e");
+      return null;
+    }
   }
 }

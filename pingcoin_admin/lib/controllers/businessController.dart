@@ -79,7 +79,7 @@ class BusinessController extends GetxController{
   }
 
   addBusinessToList(BusinessDevelopmentModel businessModel) {
-    int existingAdIndex = _allBusinesses.indexWhere((business) => business.id == business.id);
+    int existingAdIndex = _allBusinesses.indexWhere((business) => business.id == businessModel.id);
     if (existingAdIndex != -1) {
       // _allAds.removeAt(existingAdIndex);
       BusinessDevelopmentModel existingBusiness = _allBusinesses.removeAt(existingAdIndex);
@@ -91,7 +91,6 @@ class BusinessController extends GetxController{
     String status = businessModel.status;
     _categorizedBusiness.putIfAbsent(status, () => []);
     _categorizedBusiness[status]!.add(businessModel);
-
     update();
   }
 
