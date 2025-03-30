@@ -196,6 +196,6 @@ class _CoinDetailScreenState extends State<CoinDetailScreen> {
     );
   }
   startTesting(){
-    Get.to(TestSound(),transition: Transition.circularReveal);
+    Get.to(TestSound(widget.coinModel),transition: Transition.circularReveal);
   }
 }

@@ -8,8 +8,11 @@ import 'package:pingcoin/widgets/ad.dart';
 import 'package:pingcoin/widgets/customButton.dart';
 import 'package:pingcoin/widgets/infoButton.dart';
 
+import '../../../../models/coinModel.dart';
+
 class TestSound extends StatefulWidget {
-  const TestSound({super.key});
+  CoinModel coinModel;
+  TestSound(this.coinModel,{super.key});
 
   @override
   State<TestSound> createState() => _TestSoundState();
