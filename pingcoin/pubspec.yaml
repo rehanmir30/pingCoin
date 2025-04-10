@@ -52,11 +52,10 @@ dependencies:
   cloud_firestore:
   firebase_storage:
 
-  flutter_sound:
-  permission_handler:
   path_provider:
-  dio:
-  flutter_ffmpeg:
+  permission_handler:
+  flutter_sound_record:
+  ffmpeg_kit_flutter_full:
 
 dev_dependencies:
   flutter_test:

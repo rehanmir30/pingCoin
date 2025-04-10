@@ -94,7 +94,7 @@ class _GoldCollectionTileState extends State<GoldCollectionTile> {
                           children: [
                             SvgPicture.asset("assets/svgs/diameter.svg"),
                             Text(
-                              "${widget.categorizedCoin.weight}",
+                              "${widget.categorizedCoin.diameter}",
                               style: TextStyle(fontSize: 12, color: rWhite,fontWeight: FontWeight.w600),
                             ),
                           ],
@@ -103,8 +103,8 @@ class _GoldCollectionTileState extends State<GoldCollectionTile> {
                           height: 4,
                         ),
                         Text(
-                          "Diameter (${widget.categorizedCoin.weight})",
-                          style: TextStyle(color: rHint,fontSize: 7),
+                          "Diameter (${widget.categorizedCoin.diameterUnit})",
+                          style: TextStyle(color: Colors.white70,fontSize: 10),
                         )
                       ],
                     ),
@@ -124,7 +124,7 @@ class _GoldCollectionTileState extends State<GoldCollectionTile> {
                         ),
                         Text(
                           "Thickness (${widget.categorizedCoin.thicknessUnit})",
-                          style: TextStyle(color: rHint,fontSize: 7),
+                          style: TextStyle(color: Colors.white70,fontSize: 10),
                         )
                       ],
                     ),
@@ -144,7 +144,7 @@ class _GoldCollectionTileState extends State<GoldCollectionTile> {
                         ),
                         Text(
                           "Weight (${widget.categorizedCoin.weightUnit})",
-                          style: TextStyle(color: rHint,fontSize: 7),
+                          style: TextStyle(color: Colors.white70,fontSize: 10),
                         )
                       ],
                     )

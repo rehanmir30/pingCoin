@@ -79,7 +79,7 @@ class _FAQsScreenState extends State<FAQsScreen> {
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
                       return FAQTile(contentController.allFaqs[index]);
-                    }),
+                    }).marginOnly(bottom: 20),
               ],
             );
           },),

@@ -93,7 +93,7 @@ class _BusinessDevelopmentState extends State<BusinessDevelopment> {
                         Text(
                           "Personal Details",
                           style: TextStyle(color: rHint, fontWeight: FontWeight.bold, fontSize: 20, fontFamily: "font2"),
-                        ).marginSymmetric(horizontal: 12).marginOnly(top: 20),
+                        ).marginOnly(top: 20),
                         SizedBox(
                           height: 20,
                         ),
@@ -275,7 +275,7 @@ class _BusinessDevelopmentState extends State<BusinessDevelopment> {
                         Text(
                           "Business Details",
                           style: TextStyle(color: rHint, fontWeight: FontWeight.bold, fontSize: 20, fontFamily: "font2"),
-                        ).marginSymmetric(horizontal: 12).marginOnly(top: 20),
+                        ).marginOnly(top: 20),
 
                         SizedBox(
                           height: 20,
@@ -1052,7 +1052,7 @@ class _CountryCodeDropdownState extends State<CountryCodeDropdown> {
               },
               selectorConfig: SelectorConfig(
                 selectorType: PhoneInputSelectorType.DROPDOWN,
-                showFlags: false,
+                showFlags: true,
                 useEmoji: false,
                 trailingSpace: false, // Remove extra trailing space
               ),

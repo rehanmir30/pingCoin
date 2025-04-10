@@ -53,7 +53,7 @@ class _AboutScreenState extends State<AboutScreen> {
                   alignment: Alignment.center,
                   child: SvgPicture.asset("assets/svgs/logo.svg"),
                 ),
-                Text("${contentController.contentModel!.about}",style: TextStyle(color: rWhite),).marginSymmetric(horizontal: 12),
+                Text("${contentController.contentModel!.about}",style: TextStyle(color: rWhite),).marginSymmetric(horizontal: 12).marginOnly(bottom: 20),
               ],
             ),
           );

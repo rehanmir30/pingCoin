@@ -47,10 +47,10 @@ class _CoinDetailScreenState extends State<CoinDetailScreen> {
   Icon likeIcon=Icon(Icons.favorite_border,color: rWhite,);
   bool liked=false;
 
+
   @override
   void initState() {
     super.initState();
-
     if(Get.find<AuthController>().userModel!.favorites.contains(widget.coinModel.id)){
       setState(() {
         likeIcon=Icon(Icons.favorite,color: rRed,);

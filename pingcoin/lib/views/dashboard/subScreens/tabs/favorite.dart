@@ -31,7 +31,9 @@ class _FavoriteTabState extends State<FavoriteTab> {
                   "Our Collections",
                   style: TextStyle(color: rWhite, fontSize: 22, fontWeight: FontWeight.normal, fontFamily: "font2"),
                 ).marginSymmetric(horizontal: 12).marginOnly(top: 12),
-                ListView.builder(
+                authController.userModel!.favorites.isEmpty?Center(
+                  child: Text("No favorites found",style: TextStyle(color: rWhite),).marginOnly(top: MediaQuery.of(context).size.height*0.3),
+                ):ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: authController.favorites.length,
                     shrinkWrap: true,
@@ -142,6 +144,7 @@ class _FavoriteCollectionTileState extends State<FavoriteCollectionTile> {
                       "${widget.coinModel.coinFront}",
                       width: 60,
                       height: 60,
+                      fit: BoxFit.fill,
                     ),
                     Expanded(
                       child: Column(
@@ -174,6 +177,7 @@ class _FavoriteCollectionTileState extends State<FavoriteCollectionTile> {
                       "${widget.coinModel.coinBack}",
                       width: 60,
                       height: 60,
+                      fit: BoxFit.fill,
                     ),
                   ],
                 ).marginSymmetric(horizontal: 12, vertical: 8),
@@ -200,7 +204,7 @@ class _FavoriteCollectionTileState extends State<FavoriteCollectionTile> {
           ],
         ),
         SizedBox(height: 4),
-        Text(label, style: TextStyle(color: Colors.white60, fontSize: 7)),
+        Text(label, style: TextStyle(color: Colors.white70, fontSize: 10)),
       ],
     );
   }
